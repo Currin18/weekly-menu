@@ -1,17 +1,14 @@
-package com.jesusmoreira.weeklymenu.presentation.components
+package com.jesusmoreira.weeklymenu.ui.components.calendar
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
-import java.util.Date
 
 val MONTH_DAYS = listOf("L", "M", "X", "J", "V", "S", "D")
 
@@ -65,8 +62,7 @@ fun MonthGrid(date: LocalDate) {
         if (i >= dayOfWeek) weeksList.last()[i % 7] = "${i - dayOfWeek + 1}"
     }
 
-    Column(
-    ) {
+    Column {
         if (weeksList.isNotEmpty()) {
             for (week in weeksList) {
                 WeekRow(listItems = week)
