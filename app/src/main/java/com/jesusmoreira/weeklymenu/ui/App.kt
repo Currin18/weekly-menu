@@ -13,13 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.jesusmoreira.weeklymenu.ui.screens.calendar.CalendarView
+import com.jesusmoreira.weeklymenu.ui.menu.MenuScreen
+import com.jesusmoreira.weeklymenu.ui.menu.MenuViewModel
 import com.jesusmoreira.weeklymenu.ui.theme.WeeklyMenuTheme
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App() {
+fun App(menuViewModel: MenuViewModel) {
     WeeklyMenuTheme {
         Scaffold(
             topBar = {
@@ -47,7 +47,7 @@ fun App() {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    CalendarView(LocalDate.now())
+                    MenuScreen(menuViewModel)
                 }
             }
         )
@@ -60,5 +60,5 @@ fun App() {
     showBackground = true
 )
 fun AppPreview() {
-    App()
+    App(menuViewModel = MenuViewModel())
 }
