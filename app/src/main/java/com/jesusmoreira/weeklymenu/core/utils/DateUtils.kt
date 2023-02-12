@@ -2,11 +2,11 @@ package com.jesusmoreira.weeklymenu.core.utils
 
 import java.time.LocalDate
 
-/**
- * Created by indigitall.
- */
 object DateUtils {
-    fun getDayListByDate(selectedDate: LocalDate): List<List<String>> {
+    val WEEK_DAYS = listOf("L", "M", "X", "J", "V", "S", "D")
+
+    fun getDayListByDate(selectedMonth: Int, selectedYear: Int): List<List<String>> {
+        val selectedDate = LocalDate.of(selectedYear, selectedMonth, 1)
         val weeksList = mutableListOf<MutableList<String>>()
 
         val dayOfWeek = selectedDate.dayOfWeek.value - 1

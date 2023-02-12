@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,16 +17,26 @@ import androidx.compose.ui.unit.dp
 import com.jesusmoreira.weeklymenu.core.utils.DateUtils
 import java.time.LocalDate
 
-val MONTH_DAYS = listOf("L", "M", "X", "J", "V", "S", "D")
-
 @Composable
-fun Calendar(today: LocalDate, selectedDate: LocalDate, onSelectDateChange: (LocalDate) -> Unit) {
-    Column {
-        WeekRow(MONTH_DAYS, today.dayOfMonth.toString(), selectedDate.dayOfMonth.toString())
+fun Calendar(
+    today: LocalDate,
+    selectedDate: LocalDate,
+    selectedMonth: Int,
+    selectedYear: Int,
+    onSelectDateChange: (LocalDate) -> Unit
+) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) {
+        WeekRow(
+            DateUtils.WEEK_DAYS,
+            today.dayOfMonth.toString(),
+            selectedDate.dayOfMonth.toString()
+        )
         MonthGrid(
             today = today,
             selectedDate = selectedDate,
-            onDateClick = { onSelectDateChange(selectedDate.withMonth(it.toInt())) }
+            selectedMonth = selectedMonth,
+            selectedYear = selectedYear,
+            onDateClick = { onSelectDateChange(selectedDate.withDayOfMonth(it.toInt())) }
         )
     }
 }
@@ -33,9 +44,12 @@ fun Calendar(today: LocalDate, selectedDate: LocalDate, onSelectDateChange: (Loc
 @Composable
 @Preview(showBackground = true)
 fun CalendarPreview() {
+    val selectedDate = LocalDate.now().plusDays(2)
     Calendar(
         today = LocalDate.now(),
-        selectedDate = LocalDate.now().plusDays(2),
+        selectedDate = selectedDate,
+        selectedMonth = selectedDate.monthValue,
+        selectedYear = selectedDate.year,
         onSelectDateChange = {}
     )
 }
@@ -57,15 +71,16 @@ fun WeekRow(
         listItems.forEach {
             var modifier: Modifier = Modifier
             var fontWeight = FontWeight.Normal
-            var color = Color.Unspecified
+            var color = MaterialTheme.colorScheme.onPrimaryContainer
 
             if (it == selectedDay) {
-                modifier = Modifier.background(Color.LightGray, CircleShape)
+                modifier = Modifier.background(MaterialTheme.colorScheme.secondary, CircleShape)
+                color = MaterialTheme.colorScheme.onSecondary
             }
             if (it == today) {
-                modifier = Modifier.background(Color.Gray, CircleShape)
+                modifier = Modifier.background(MaterialTheme.colorScheme.primary, CircleShape)
                 fontWeight = FontWeight.Bold
-                color = Color.White
+                color = MaterialTheme.colorScheme.onPrimary
             }
 
             Text(
@@ -85,13 +100,18 @@ fun WeekRow(
 @Composable
 @Preview(showBackground = true)
 fun WeekRowPreview() {
-    WeekRow(MONTH_DAYS, "", "")
+    WeekRow(DateUtils.WEEK_DAYS, "", "")
 }
 
 @Composable
-fun MonthGrid(today: LocalDate, selectedDate: LocalDate, onDateClick: (String) -> Unit = {}) {
-
-    val weeksList = DateUtils.getDayListByDate(selectedDate)
+fun MonthGrid(
+    today: LocalDate,
+    selectedDate: LocalDate,
+    selectedMonth: Int,
+    selectedYear: Int,
+    onDateClick: (String) -> Unit = {}
+) {
+    val weeksList = DateUtils.getDayListByDate(selectedMonth, selectedYear)
 
     Column {
         if (weeksList.isNotEmpty()) {
@@ -109,5 +129,6 @@ fun MonthGrid(today: LocalDate, selectedDate: LocalDate, onDateClick: (String) -
 @Composable
 @Preview(showBackground = true)
 fun MonthGridPreview() {
-    MonthGrid(LocalDate.now(), LocalDate.now())
+    val selectedDate = LocalDate.now()
+    MonthGrid(LocalDate.now(), selectedDate, selectedDate.monthValue, selectedDate.year)
 }

@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.menu
+package com.jesusmoreira.weeklymenu.ui.cookbook
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,26 +19,16 @@ import androidx.navigation.compose.rememberNavController
 import com.jesusmoreira.weeklymenu.R
 import com.jesusmoreira.weeklymenu.ui.components.BottomNavigationBar
 import com.jesusmoreira.weeklymenu.ui.components.TopActionBar
-import com.jesusmoreira.weeklymenu.ui.menu.components.Calendar
-import com.jesusmoreira.weeklymenu.ui.menu.components.DailyMenu
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(navController: NavHostController, viewModel: MenuViewModel) {
-    val selectedDate: LocalDate by viewModel.selectedDate
-        .observeAsState(initial = viewModel.today)
-    val selectedMonth: Int by viewModel.selectedMonth
-        .observeAsState(initial = viewModel.today.monthValue)
-    val selectedYear: Int by viewModel.selectedYear
-        .observeAsState(initial = viewModel.today.year)
-
+fun CookbookScreen(navController: NavHostController) {
     Scaffold(
-        topBar = { TopActionBar(stringResource(id = R.string.menu)) },
-        content = { padding ->
+        topBar = { TopActionBar(stringResource(id = R.string.cookbook)) },
+        content = {
             Column(
                 modifier = Modifier
-                    .padding(padding)
+                    .padding(it)
                     .fillMaxSize()
                     .background(Color.White),
                 verticalArrangement = Arrangement.Top,
@@ -50,14 +38,7 @@ fun MenuScreen(navController: NavHostController, viewModel: MenuViewModel) {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Calendar(
-                        today = viewModel.today,
-                        selectedDate = selectedDate,
-                        selectedMonth = selectedMonth,
-                        selectedYear = selectedYear,
-                        onSelectDateChange = { viewModel.onSelectedDateChange(it) }
-                    )
-                    DailyMenu(selectedDate = selectedDate)
+                    Text(text = "Cookbook Screen")
                 }
             }
         },
@@ -67,6 +48,6 @@ fun MenuScreen(navController: NavHostController, viewModel: MenuViewModel) {
 
 @Composable
 @Preview(showBackground = true)
-fun MenuScreenPreview() {
-    MenuScreen(navController = rememberNavController(), viewModel = MenuViewModel())
+fun CookbookScreenPreview() {
+    CookbookScreen(navController = rememberNavController())
 }
