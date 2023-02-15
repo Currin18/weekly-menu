@@ -6,6 +6,11 @@ import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetAllRecipesUseCase
 import kotlinx.coroutines.launch
 
 class CookbookViewModel(private val getAllRecipes: GetAllRecipesUseCase?): ViewModel() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+    fun startLoading() = run { _isLoading.value = true }
+    fun stopLoading() = run { _isLoading.value = false }
+
     // private val _recipes = MutableLiveData<List<Recipe>>()
     private val _recipes by lazy {
         MutableLiveData<List<Recipe>>()
@@ -13,10 +18,15 @@ class CookbookViewModel(private val getAllRecipes: GetAllRecipesUseCase?): ViewM
     val recipes: LiveData<List<Recipe>> get() = _recipes
 
     init {
+        loadRecipes()
+    }
+
+    fun loadRecipes() {
+//        startLoading()
         viewModelScope.launch {
             getAllRecipes?.let { getAll ->
-                val allRecipes = getAll()
-                _recipes.value = allRecipes
+                _recipes.value = getAll()
+//                stopLoading()
             }
         }
     }

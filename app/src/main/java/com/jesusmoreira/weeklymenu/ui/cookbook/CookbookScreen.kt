@@ -1,6 +1,5 @@
 package com.jesusmoreira.weeklymenu.ui.cookbook
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -27,8 +25,10 @@ import com.jesusmoreira.weeklymenu.ui.navigation.Router
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CookbookScreen(navController: NavHostController, viewModel: CookbookViewModel) {
+    val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val recipes: List<Recipe> by viewModel.recipes.observeAsState(initial = listOf())
-//    val recipes = listOf<Recipe>()
+
+    viewModel.loadRecipes()
 
     Scaffold(
         topBar = { TopActionBar(stringResource(id = R.string.cookbook), false) },
@@ -37,10 +37,11 @@ fun CookbookScreen(navController: NavHostController, viewModel: CookbookViewMode
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Cookbook(recipes)
+                if (isLoading) CircularProgressIndicator(progress = 0.5f)
+                else Cookbook(recipes)
             }
         },
         floatingActionButton = {

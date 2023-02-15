@@ -13,9 +13,9 @@ import com.jesusmoreira.weeklymenu.domain.model.Recipe
 
 @Composable
 fun Cookbook(recipes: List<Recipe>) {
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
         if (recipes.isNotEmpty()) {
             items(
                 items = recipes,
@@ -28,15 +28,6 @@ fun Cookbook(recipes: List<Recipe>) {
 }
 
 @Composable
-@Preview(showBackground = true)
-fun CookbookPreview() {
-    Cookbook(listOf(
-        Recipe(id = 1, name = "Huevos con patatas"),
-        Recipe(id = 2, name = "Huevos con patatas 2")
-    ))
-}
-
-@Composable
 fun RecipeRow(recipe: Recipe) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
@@ -46,8 +37,21 @@ fun RecipeRow(recipe: Recipe) {
     }
 }
 
+/**
+ * Previews
+ */
+
 @Composable
 @Preview(showBackground = true)
 fun RecipeRowPreview() {
     RecipeRow(Recipe(1, "Huevos con patatas", emptyList(), "description"))
+}
+
+@Composable
+@Preview(showBackground = true)
+fun CookbookPreview() {
+    Cookbook(listOf(
+        Recipe(id = 1, name = "Huevos con patatas"),
+        Recipe(id = 2, name = "Huevos con patatas 2")
+    ))
 }
