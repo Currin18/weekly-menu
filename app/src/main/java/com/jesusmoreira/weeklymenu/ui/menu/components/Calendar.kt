@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,19 +27,25 @@ fun Calendar(
     selectedYear: Int,
     onSelectDateChange: (LocalDate) -> Unit
 ) {
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) {
-        WeekRow(
-            DateUtils.WEEK_DAYS,
-            today.dayOfMonth.toString(),
-            selectedDate.dayOfMonth.toString()
-        )
-        MonthGrid(
-            today = today,
-            selectedDate = selectedDate,
-            selectedMonth = selectedMonth,
-            selectedYear = selectedYear,
-            onDateClick = { onSelectDateChange(selectedDate.withDayOfMonth(it.toInt())) }
-        )
+    Surface(
+        color = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        tonalElevation = 3.dp,
+    ) {
+        Column {
+            WeekRow(
+                DateUtils.WEEK_DAYS,
+                today.dayOfMonth.toString(),
+                selectedDate.dayOfMonth.toString()
+            )
+            MonthGrid(
+                today = today,
+                selectedDate = selectedDate,
+                selectedMonth = selectedMonth,
+                selectedYear = selectedYear,
+                onDateClick = { onSelectDateChange(selectedDate.withDayOfMonth(it.toInt())) }
+            )
+        }
     }
 }
 
@@ -74,11 +82,11 @@ fun WeekRow(
             var color = MaterialTheme.colorScheme.onPrimaryContainer
 
             if (it == selectedDay) {
-                modifier = Modifier.background(MaterialTheme.colorScheme.secondary, CircleShape)
+                modifier = Modifier.background(MaterialTheme.colorScheme.tertiary, CircleShape)
                 color = MaterialTheme.colorScheme.onSecondary
             }
             if (it == today) {
-                modifier = Modifier.background(MaterialTheme.colorScheme.primary, CircleShape)
+                modifier = Modifier.background(MaterialTheme.colorScheme.secondary, CircleShape)
                 fontWeight = FontWeight.Bold
                 color = MaterialTheme.colorScheme.onPrimary
             }

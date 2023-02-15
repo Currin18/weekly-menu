@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,12 +18,15 @@ import java.time.LocalDate
 
 @Composable
 fun DailyMenu(selectedDate: LocalDate) {
-    Column(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+    Surface(
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
     ) {
-        DateRow(selectedDate = selectedDate)
-        Divider()
-        ServiceRow()
+        Column {
+            DateRow(selectedDate = selectedDate)
+            Divider()
+            ServiceRow()
+        }
     }
 }
 
@@ -38,9 +42,7 @@ fun DateRow(selectedDate: LocalDate) {
         modifier = Modifier
             .fillMaxWidth()
             .height(32.dp),
-//            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
             modifier = Modifier.size(32.dp),
@@ -51,7 +53,6 @@ fun DateRow(selectedDate: LocalDate) {
             )
         }
         Divider(
-//            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.dp)
@@ -166,7 +167,7 @@ fun ServiceRow() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
-                        .background(MaterialTheme.colorScheme.surface),
+                        .background(MaterialTheme.colorScheme.secondaryContainer),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
@@ -221,10 +222,6 @@ fun ServiceRow() {
                         )
                     }
                 }
-            }
-
-            item {
-
             }
         }
     }
