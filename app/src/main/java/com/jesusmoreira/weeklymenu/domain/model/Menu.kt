@@ -6,10 +6,3 @@ data class Menu(
     val date: LocalDate,
     var recipes: Map<Service, List<Recipe>>
 )
-
-enum class Service {
-    BREAKFAST,
-    LUNCH,
-    SNACK,
-    DINNER
-}

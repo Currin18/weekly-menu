@@ -1,11 +1,14 @@
 package com.jesusmoreira.weeklymenu.domain.mapper
 
+import com.jesusmoreira.weeklymenu.domain.model.Service
 import com.jesusmoreira.weeklymenu.domain.model.Recipe as DomainRecipe
 import com.jesusmoreira.weeklymenu.data.local.entity.Recipe as LocalRecipe
 
 fun LocalRecipe.toDomainRecipe(): DomainRecipe = DomainRecipe(
     id,
     name,
+    setOf(Service.DINNER),
+    0,
     listOf(),
     description
 )

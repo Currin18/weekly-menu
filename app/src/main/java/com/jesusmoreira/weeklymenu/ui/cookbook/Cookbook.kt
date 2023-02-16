@@ -10,18 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
+import com.jesusmoreira.weeklymenu.ui.components.RecipeCard
 
 @Composable
 fun Cookbook(recipes: List<Recipe>) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(24.dp)
     ) {
         if (recipes.isNotEmpty()) {
             items(
                 items = recipes,
                 key = { it.id ?: 0 }
             ) { item ->
-                RecipeRow(item)
+                RecipeCard(recipe = item)
             }
         }
     }
@@ -30,7 +33,9 @@ fun Cookbook(recipes: List<Recipe>) {
 @Composable
 fun RecipeRow(recipe: Recipe) {
     Column {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)) {
             Text(text = recipe.name)
         }
         Divider()
@@ -44,7 +49,12 @@ fun RecipeRow(recipe: Recipe) {
 @Composable
 @Preview(showBackground = true)
 fun RecipeRowPreview() {
-    RecipeRow(Recipe(1, "Huevos con patatas", emptyList(), "description"))
+    RecipeRow(Recipe(
+        id = 1,
+        name ="Huevos con patatas",
+        ingredients = emptyList(),
+        description = "description")
+    )
 }
 
 @Composable
