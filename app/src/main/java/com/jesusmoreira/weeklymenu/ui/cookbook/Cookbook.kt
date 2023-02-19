@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
-import com.jesusmoreira.weeklymenu.ui.components.RecipeCard
+import com.jesusmoreira.weeklymenu.ui.common.RecipeCard
 
 @Composable
-fun Cookbook(recipes: List<Recipe>) {
+fun Cookbook(recipes: List<Recipe>, onClickCard: (Int) -> Unit = {}) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -24,7 +24,7 @@ fun Cookbook(recipes: List<Recipe>) {
                 items = recipes,
                 key = { it.id ?: 0 }
             ) { item ->
-                RecipeCard(recipe = item)
+                RecipeCard(recipe = item, onClick = { onClickCard(it.id!!) })
             }
         }
     }

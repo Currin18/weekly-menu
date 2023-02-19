@@ -18,8 +18,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.jesusmoreira.weeklymenu.R
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
-import com.jesusmoreira.weeklymenu.ui.components.BottomNavigationBar
-import com.jesusmoreira.weeklymenu.ui.components.TopActionBar
+import com.jesusmoreira.weeklymenu.ui.common.BottomNavigationBar
+import com.jesusmoreira.weeklymenu.ui.common.TopActionBar
 import com.jesusmoreira.weeklymenu.ui.navigation.Router
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +31,7 @@ fun CookbookScreen(navController: NavHostController, viewModel: CookbookViewMode
     viewModel.loadRecipes()
 
     Scaffold(
-        topBar = { TopActionBar(stringResource(id = R.string.cookbook), false) },
+        topBar = { TopActionBar(stringResource(id = R.string.cookbook)) },
         content = {
             Column(
                 modifier = Modifier
@@ -41,7 +41,13 @@ fun CookbookScreen(navController: NavHostController, viewModel: CookbookViewMode
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (isLoading) CircularProgressIndicator(progress = 0.5f)
-                else Cookbook(recipes)
+                else Cookbook(recipes) { recipeId ->
+                    navController.navigate(
+                        Router.RecipeDetail.route
+                            .replace("{recipeId}", "$recipeId"
+                        )
+                    )
+                }
             }
         },
         floatingActionButton = {

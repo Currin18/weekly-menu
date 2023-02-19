@@ -5,4 +5,5 @@ object Routes {
     const val COOKBOOK_SCREEN = "cookbook_screen"
     const val RECIPE_NEW_SCREEN = "recipe_new"
     const val RECIPE_EDIT_SCREEN = "recipe_new"
+    const val RECIPE_DETAIL_SCREEN = "recipe_detail/{recipeId}"
 }

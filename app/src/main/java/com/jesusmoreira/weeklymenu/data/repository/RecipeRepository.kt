@@ -7,9 +7,11 @@ class RecipeRepository(
     private val recipesLocalDataSource: RecipesLocalDataSource
 ) {
     fun getAll() = recipesLocalDataSource.getAll()
-    fun findById(recipeId: Int) = recipesLocalDataSource.findById(recipeId)
+    fun getById(recipeId: Int) = recipesLocalDataSource.getById(recipeId)
 
     fun insert(recipe: LocalRecipe) = recipesLocalDataSource.insert(recipe)
+
+    fun update(recipe: LocalRecipe) = recipesLocalDataSource.update(recipe)
 
     fun delete(recipe: LocalRecipe) = recipesLocalDataSource.delete(recipe)
 

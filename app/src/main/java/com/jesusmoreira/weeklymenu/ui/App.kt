@@ -13,6 +13,8 @@ import com.jesusmoreira.weeklymenu.ui.menu.MenuViewModel
 import com.jesusmoreira.weeklymenu.ui.navigation.Router
 import com.jesusmoreira.weeklymenu.ui.recipe.RecipeScreen
 import com.jesusmoreira.weeklymenu.ui.recipe.RecipeViewModel
+import com.jesusmoreira.weeklymenu.ui.recipedetail.RecipeDetailScreen
+import com.jesusmoreira.weeklymenu.ui.recipedetail.RecipeDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,6 +22,7 @@ fun App(
     menuViewModel: MenuViewModel,
     cookbookViewModel: CookbookViewModel,
     recipeViewModel: RecipeViewModel,
+    recipeDetailViewModel: RecipeDetailViewModel,
 ) {
     val navController = rememberNavController()
 
@@ -32,6 +35,15 @@ fun App(
         }
         composable(route = Router.RecipeNewScreen.route) {
             RecipeScreen(navController = navController, recipeViewModel)
+        }
+        composable(route = Router.RecipeDetail.route) { backStackEntry ->
+            backStackEntry.arguments?.getString("recipeId")?.let {
+                RecipeDetailScreen(
+                    navController = navController,
+                    recipeId = it.toInt(),
+                    viewModel = recipeDetailViewModel
+                )
+            }
         }
     }
 }

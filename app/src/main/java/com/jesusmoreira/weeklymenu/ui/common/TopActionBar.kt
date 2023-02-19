@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.components
+package com.jesusmoreira.weeklymenu.ui.common
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun TopActionBar(title: String, showBackButton: Boolean, onBackButton: () -> Unit = {}) {
+fun TopActionBar(title: String, showBackButton: Boolean = false, onBackButton: () -> Unit = {}) {
     TopAppBar(
         title = {
             Text(text = title)

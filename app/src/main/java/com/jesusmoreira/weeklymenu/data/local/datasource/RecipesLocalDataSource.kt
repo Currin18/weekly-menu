@@ -5,7 +5,8 @@ import com.jesusmoreira.weeklymenu.data.local.entity.Recipe
 
 class RecipesLocalDataSource(private val recipeDao: RecipeDao) {
     fun getAll(): List<Recipe> = recipeDao.getAll()
-    fun findById(recipeId: Int): Recipe = recipeDao.findById(recipeId)
+    fun getById(recipeId: Int): Recipe = recipeDao.getById(recipeId)
     fun insert(recipe: Recipe) = recipeDao.insert(recipe)
+    fun update(recipe: Recipe) = recipeDao.update(recipe)
     fun delete(recipe: Recipe) = recipeDao.delete(recipe)
 }

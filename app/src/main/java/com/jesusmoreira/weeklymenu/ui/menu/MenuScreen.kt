@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.jesusmoreira.weeklymenu.R
-import com.jesusmoreira.weeklymenu.ui.components.BottomNavigationBar
-import com.jesusmoreira.weeklymenu.ui.components.TopActionBar
+import com.jesusmoreira.weeklymenu.ui.common.BottomNavigationBar
+import com.jesusmoreira.weeklymenu.ui.common.TopActionBar
 import com.jesusmoreira.weeklymenu.ui.menu.components.Calendar
 import com.jesusmoreira.weeklymenu.ui.menu.components.DailyMenu
 import java.time.LocalDate
@@ -33,7 +33,7 @@ fun MenuScreen(navController: NavHostController, viewModel: MenuViewModel) {
         .observeAsState(initial = viewModel.today.year)
 
     Scaffold(
-        topBar = { TopActionBar(stringResource(id = R.string.menu), false) },
+        topBar = { TopActionBar(stringResource(id = R.string.menu)) },
         content = { padding ->
             Column(
                 modifier = Modifier

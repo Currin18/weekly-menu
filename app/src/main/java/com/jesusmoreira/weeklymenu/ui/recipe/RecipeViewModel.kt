@@ -7,7 +7,10 @@ import com.jesusmoreira.weeklymenu.domain.model.Recipe
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.InsertRecipeUseCase
 
 
-class RecipeViewModel(private val insertRecipe: InsertRecipeUseCase? = null, private val recipeId: Int? = null): ViewModel() {
+class RecipeViewModel(
+    private val insertRecipe: InsertRecipeUseCase? = null,
+    private val recipeId: Int? = null
+): ViewModel() {
     private val _name = MutableLiveData("")
     val name: LiveData<String> = _name
 

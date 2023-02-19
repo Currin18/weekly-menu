@@ -5,11 +5,3 @@ data class Ingredient(
     var amount: Float = 0f,
     var unit: Unit = Unit.UNITS
 )
-
-enum class Unit {
-    UNITS,
-    GRAMS,
-    KILOGRAMS,
-    MILLILITRE,
-    LITRE
-}

@@ -10,34 +10,36 @@ import com.jesusmoreira.weeklymenu.data.local.datasource.RecipesLocalDataSource
 import com.jesusmoreira.weeklymenu.data.local.db.WeeklyMenuDB
 import com.jesusmoreira.weeklymenu.data.repository.RecipeRepository
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetAllRecipesUseCase
+import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetRecipeByIdUseCase
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.InsertRecipeUseCase
 import com.jesusmoreira.weeklymenu.ui.App
 import com.jesusmoreira.weeklymenu.ui.cookbook.CookbookViewModel
 import com.jesusmoreira.weeklymenu.ui.menu.MenuViewModel
 import com.jesusmoreira.weeklymenu.ui.recipe.RecipeViewModel
+import com.jesusmoreira.weeklymenu.ui.recipedetail.RecipeDetailViewModel
 import com.jesusmoreira.weeklymenu.ui.theme.WeeklyMenuTheme
 
 class MainActivity : ComponentActivity() {
 
-//    private lateinit var db: WeeklyMenuDB
-//
-//    private lateinit var menuViewModel: MenuViewModel
-//    private lateinit var cookbookViewModel: CookbookViewModel
-//    private lateinit var recipeViewModel: RecipeViewModel
-//    by viewModels {
-//        RecipeViewModel(InsertRecipeUseCase(db.recipeDao()))
-//    }
+    private lateinit var db: WeeklyMenuDB
+
+    private lateinit var recipeRepository: RecipeRepository
+
+    private lateinit var cookbookViewModel: CookbookViewModel
+    private lateinit var recipeViewModel: RecipeViewModel
+    private lateinit var recipeDetailViewModel: RecipeDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = WeeklyMenuDB.getInstance(this)
+        db = WeeklyMenuDB.getInstance(this)
 
-        val menuViewModel = MenuViewModel()
+        recipeRepository = RecipeRepository(RecipesLocalDataSource(db.recipeDao()))
 
-        val recipeRepository = RecipeRepository(RecipesLocalDataSource(db.recipeDao()))
-        val cookbookViewModel = CookbookViewModel(GetAllRecipesUseCase(recipeRepository))
-        val recipeViewModel = RecipeViewModel(InsertRecipeUseCase(recipeRepository))
+        val menuViewModel = MenuViewModel() // TODO: manage with repository
+        cookbookViewModel = CookbookViewModel(GetAllRecipesUseCase(recipeRepository))
+        recipeViewModel = RecipeViewModel(InsertRecipeUseCase(recipeRepository))
+        recipeDetailViewModel = RecipeDetailViewModel(GetRecipeByIdUseCase(recipeRepository))
 
         setContent {
             WeeklyMenuTheme {
@@ -45,7 +47,8 @@ class MainActivity : ComponentActivity() {
                     App(
                         menuViewModel = menuViewModel,
                         cookbookViewModel = cookbookViewModel,
-                        recipeViewModel = recipeViewModel
+                        recipeViewModel = recipeViewModel,
+                        recipeDetailViewModel = recipeDetailViewModel,
                     )
                 }
             }

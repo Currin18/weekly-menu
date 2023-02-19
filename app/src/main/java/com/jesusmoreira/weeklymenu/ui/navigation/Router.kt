@@ -5,4 +5,5 @@ sealed class Router(val route: String) {
     object CookbookScreen: Router(Routes.COOKBOOK_SCREEN)
     object RecipeNewScreen: Router(Routes.RECIPE_NEW_SCREEN)
     object RecipeEditScreen: Router(Routes.RECIPE_EDIT_SCREEN)
+    object RecipeDetail: Router(Routes.RECIPE_DETAIL_SCREEN)
 }

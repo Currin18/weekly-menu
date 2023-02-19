@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.components
+package com.jesusmoreira.weeklymenu.ui.common
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons

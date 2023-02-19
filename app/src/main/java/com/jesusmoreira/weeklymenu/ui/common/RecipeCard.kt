@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.components
+package com.jesusmoreira.weeklymenu.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,26 +8,28 @@ import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
 import com.jesusmoreira.weeklymenu.domain.model.Service
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeCard(recipe: Recipe) {
+fun RecipeCard(recipe: Recipe, onClick: (Recipe) -> Unit = {}) {
     var isFavorite by remember { mutableStateOf(false) }
-    Surface(modifier = Modifier.shadow(4.dp).padding(4.dp)) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(4.dp),
+        onClick = { onClick(recipe) }
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -38,7 +40,7 @@ fun RecipeCard(recipe: Recipe) {
                     .fillMaxSize()
             ) {
                 RecipeCardImage()
-                RecipeCardContent(recipe.name, recipe.categories, recipe.time)
+                RecipeCardContent(recipe.name, recipe.services, recipe.time)
             }
             RecipeCardFavorite(
                 isFavorite = isFavorite,
@@ -51,16 +53,26 @@ fun RecipeCard(recipe: Recipe) {
 }
 
 @Composable
-fun RecipeCardImage(description: String = "Default image") {
+fun RecipeCardImage(description: String = "") {
+    DefaultImage()
+}
+
+@Composable
+fun DefaultImage(
+    description: String = "Default image",
+    padding: Dp = 32.dp,
+    aspectRatio: Float = 1f
+) {
     Box(
         modifier = Modifier
-            .aspectRatio(1f, true)
+            .aspectRatio(aspectRatio, aspectRatio == 1f)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(padding)
     ) {
         Icon(
             modifier = Modifier
-                .size(32.dp)
+                .fillMaxSize()
                 .align(Alignment.Center),
             imageVector = Icons.Filled.LocalDining,
             contentDescription = description,
@@ -70,9 +82,13 @@ fun RecipeCardImage(description: String = "Default image") {
 }
 
 @Composable
-fun TimeWidget(time: Int) {
+fun TimeWidget(
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    time: Int
+) {
     Row(
-        modifier = Modifier.height(16.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
@@ -82,13 +98,13 @@ fun TimeWidget(time: Int) {
                 time > 60 -> "${time / 60}h ${time % 60}min"
                 else -> "${time}min"
             },
-            style = MaterialTheme.typography.bodySmall
+            style = textStyle
         )
     }
 }
 
 @Composable
-fun RecipeCardContent(name: String, category: Set<Service>, time: Int) {
+fun RecipeCardContent(name: String, services: Set<Service>, time: Int) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +113,7 @@ fun RecipeCardContent(name: String, category: Set<Service>, time: Int) {
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = category.sorted().joinToString(" · "),
+            text = services.sorted().joinToString(" · "),
             maxLines = 1,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelMedium
@@ -110,7 +126,10 @@ fun RecipeCardContent(name: String, category: Set<Service>, time: Int) {
             style = MaterialTheme.typography.headlineSmall,
             fontSize = 16.sp
         )
-        TimeWidget(time)
+        TimeWidget(
+            modifier = Modifier.height(16.dp),
+            time = time
+        )
     }
 }
 
@@ -142,12 +161,12 @@ fun RecipeCardFavorite(
  */
 
 @Composable
-@Preview(showBackground = true)
+@Preview
 fun RecipeCardPreview() {
     RecipeCard(Recipe(
         id = 1,
         name ="Butter Chicken Curry",
-        categories = setOf(Service.DINNER),
+        services = setOf(Service.DINNER),
         time = 35
     ))
 }
@@ -163,7 +182,7 @@ fun RecipeImageCardPreviewDefault() {
 fun RecipeCardContentPreviewDefault() {
     RecipeCardContent(
         name = "Butter Chicken Curry",
-        category = setOf(Service.DINNER),
+        services = setOf(Service.DINNER),
         time = 35
     )
 }
@@ -173,7 +192,7 @@ fun RecipeCardContentPreviewDefault() {
 fun RecipeCardContentPreviewStrange() {
     RecipeCardContent(
         name = "Cheese and Tarragon Mushrooms with tomato",
-        category = setOf(Service.LUNCH, Service.DINNER),
+        services = setOf(Service.LUNCH, Service.DINNER),
         time = 324
     )
 }
@@ -183,7 +202,7 @@ fun RecipeCardContentPreviewStrange() {
 fun RecipeCardContentPreviewEmpty() {
     RecipeCardContent(
         name = "Cheese and Tarragon Mushrooms with tomato",
-        category = setOf(),
+        services = setOf(),
         time = 0
     )
 }

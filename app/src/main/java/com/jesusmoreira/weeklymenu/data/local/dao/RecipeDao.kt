@@ -1,9 +1,6 @@
 package com.jesusmoreira.weeklymenu.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.jesusmoreira.weeklymenu.data.local.entity.Recipe
 
 @Dao
@@ -12,7 +9,7 @@ interface RecipeDao {
     fun getAll(): List<Recipe>
 
     @Query("SELECT * FROM recipe WHERE id = :recipeId")
-    fun findById(recipeId: Int): Recipe
+    fun getById(recipeId: Int): Recipe
 
 //    @Query("SELECT * FROM recipe WHERE id IN (:recipeIds)")
 //    fun loadAllByIds(recipeIds: IntArray): List<Recipe>
@@ -22,6 +19,9 @@ interface RecipeDao {
 
     @Insert
     fun insert(recipe: Recipe)
+
+    @Update
+    fun update(recipe: Recipe)
 
 //    @Insert
 //    fun insertAll(vararg recipes: Recipe)
