@@ -12,12 +12,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jesusmoreira.weeklymenu.R
+import com.jesusmoreira.weeklymenu.domain.model.Difficulty
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
 import com.jesusmoreira.weeklymenu.domain.model.Service
 
@@ -104,6 +107,28 @@ fun TimeWidget(
 }
 
 @Composable
+fun DifficultyWidget(
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    difficulty: Difficulty
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_pot_steam),
+            contentDescription = "Difficulty icon"
+        )
+        Text(
+            text = difficulty.name,
+            style = textStyle
+        )
+    }
+}
+
+@Composable
 fun RecipeCardContent(name: String, services: Set<Service>, time: Int) {
     Column(
         modifier = Modifier
@@ -178,8 +203,19 @@ fun RecipeImageCardPreviewDefault() {
 }
 
 @Composable
-@Preview(showBackground = true, heightDp = 96)
-fun RecipeCardContentPreviewDefault() {
+@Preview(showBackground = true)
+fun DifficultyWidgetPreview() {
+    DifficultyWidget(difficulty = Difficulty.EASY)
+}
+
+@Composable
+@Preview(
+    name = "Default",
+    group = "Content Preview",
+    showBackground = true,
+    heightDp = 96
+)
+fun ContentPreviewDefault() {
     RecipeCardContent(
         name = "Butter Chicken Curry",
         services = setOf(Service.DINNER),
@@ -188,8 +224,13 @@ fun RecipeCardContentPreviewDefault() {
 }
 
 @Composable
-@Preview(showBackground = true, heightDp = 96)
-fun RecipeCardContentPreviewStrange() {
+@Preview(
+    name = "Strange",
+    group = "Content Preview",
+    showBackground = true,
+    heightDp = 96
+)
+fun ContentPreviewStrange() {
     RecipeCardContent(
         name = "Cheese and Tarragon Mushrooms with tomato",
         services = setOf(Service.LUNCH, Service.DINNER),
@@ -198,8 +239,13 @@ fun RecipeCardContentPreviewStrange() {
 }
 
 @Composable
-@Preview(showBackground = true, heightDp = 96)
-fun RecipeCardContentPreviewEmpty() {
+@Preview(
+    name = "Empty",
+    group = "Content Preview",
+    showBackground = true,
+    heightDp = 96
+)
+fun ContentPreviewEmpty() {
     RecipeCardContent(
         name = "Cheese and Tarragon Mushrooms with tomato",
         services = setOf(),

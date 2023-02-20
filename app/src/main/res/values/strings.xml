@@ -2,4 +2,16 @@
     <string name="app_name">Weekly Menu</string>
     <string name="menu">Menu</string>
     <string name="cookbook">Cook Book</string>
+    <string name="ingredients">Ingredients</string>
+    <!-- Units -->
+    <string name="unit_unit">Unit</string>
+    <string name="unit_unit_plural">Units</string>
+    <string name="unit_gram">Gram</string>
+    <string name="unit_gram_plural">Grams</string>
+    <string name="unit_kilogram">Kilogram</string>
+    <string name="unit_kilogram_plural">Kilograms</string>
+    <string name="unit_millilitre">Millilitre</string>
+    <string name="unit_millilitre_plural">Millilitres</string>
+    <string name="unit_litre">Litre</string>
+    <string name="unit_litre_plural">Litres</string>
 </resources>

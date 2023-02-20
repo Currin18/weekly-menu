@@ -4,19 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jesusmoreira.weeklymenu.core.utils.DateUtils
+import com.jesusmoreira.weeklymenu.core.util.DateUtil
 import java.time.LocalDate
 
 @Composable
@@ -34,7 +32,7 @@ fun Calendar(
     ) {
         Column {
             WeekRow(
-                DateUtils.WEEK_DAYS,
+                DateUtil.WEEK_DAYS,
                 today.dayOfMonth.toString(),
                 selectedDate.dayOfMonth.toString()
             )
@@ -108,7 +106,7 @@ fun WeekRow(
 @Composable
 @Preview(showBackground = true)
 fun WeekRowPreview() {
-    WeekRow(DateUtils.WEEK_DAYS, "", "")
+    WeekRow(DateUtil.WEEK_DAYS, "", "")
 }
 
 @Composable
@@ -119,7 +117,7 @@ fun MonthGrid(
     selectedYear: Int,
     onDateClick: (String) -> Unit = {}
 ) {
-    val weeksList = DateUtils.getDayListByDate(selectedMonth, selectedYear)
+    val weeksList = DateUtil.getDayListByDate(selectedMonth, selectedYear)
 
     Column {
         if (weeksList.isNotEmpty()) {

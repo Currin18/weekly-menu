@@ -1,8 +1,8 @@
-package com.jesusmoreira.weeklymenu.core.utils
+package com.jesusmoreira.weeklymenu.core.util
 
 import java.time.LocalDate
 
-object DateUtils {
+object DateUtil {
     val WEEK_DAYS = listOf("L", "M", "X", "J", "V", "S", "D")
 
     fun getDayListByDate(selectedMonth: Int, selectedYear: Int): List<List<String>> {

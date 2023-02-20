@@ -4,17 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.jesusmoreira.weeklymenu.data.local.converters.ServicesConverter
-import com.jesusmoreira.weeklymenu.data.local.converters.TagsConverter
 import com.jesusmoreira.weeklymenu.data.local.dao.RecipeDao
 import com.jesusmoreira.weeklymenu.data.local.entity.Recipe
 
 @Database(
     entities = [Recipe::class],
-    version = 4
+    version = 7
 )
-@TypeConverters(TagsConverter::class, ServicesConverter::class)
 abstract class WeeklyMenuDB: RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
 
