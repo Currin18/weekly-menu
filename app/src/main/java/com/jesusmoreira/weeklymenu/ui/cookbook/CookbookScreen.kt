@@ -40,13 +40,19 @@ fun CookbookScreen(navController: NavHostController, viewModel: CookbookViewMode
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (isLoading) CircularProgressIndicator(progress = 0.5f)
-                else Cookbook(recipes) { recipeId ->
-                    navController.navigate(
-                        Router.RecipeDetail.route
-                            .replace("{recipeId}", "$recipeId"
+                if (isLoading) {
+                    CircularProgressIndicator(progress = 0.5f)
+                } else if (recipes.isNotEmpty()) {
+                    Cookbook(recipes) { recipeId ->
+                        navController.navigate(
+                            Router.RecipeDetail.route
+                                .replace("{recipeId}", "$recipeId")
                         )
-                    )
+                    }
+                } else {
+                    Button(onClick = { viewModel.populate() }) {
+                        Text(text = "Populate")
+                    }
                 }
             }
         },

@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.recipe
+package com.jesusmoreira.weeklymenu.ui.recipedetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

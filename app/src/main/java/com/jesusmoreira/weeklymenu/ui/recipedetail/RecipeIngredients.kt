@@ -1,4 +1,4 @@
-package com.jesusmoreira.weeklymenu.ui.recipe
+package com.jesusmoreira.weeklymenu.ui.recipedetail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +41,7 @@ fun RecipeIngredients(ingredients: List<Ingredient> = listOf()) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ingredients.forEach {
-                val plural = it.amount != 1
+                val plural = "${it.amount}" != "1"
 
                 Text(
                     style = MaterialTheme.typography.bodyLarge,

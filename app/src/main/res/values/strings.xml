@@ -3,6 +3,7 @@
     <string name="menu">Menu</string>
     <string name="cookbook">Cook Book</string>
     <string name="ingredients">Ingredients</string>
+    <string name="step">Step</string>
     <!-- Units -->
     <string name="unit_unit">Unit</string>
     <string name="unit_unit_plural">Units</string>

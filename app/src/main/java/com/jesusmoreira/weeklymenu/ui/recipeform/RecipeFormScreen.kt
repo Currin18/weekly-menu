@@ -1,21 +1,27 @@
-package com.jesusmoreira.weeklymenu.ui.recipe
+package com.jesusmoreira.weeklymenu.ui.recipeform
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.jesusmoreira.weeklymenu.ui.common.TopActionBar
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeScreen(navController: NavController, viewModel: RecipeViewModel) {
-    val coroutineScope = rememberCoroutineScope()
+fun RecipeFormScreen(
+    navController: NavController,
+    viewModel: RecipeFormViewModel
+) {
+    val title: String by viewModel.title
+        .observeAsState(initial = "")
     val name: String by viewModel.name
         .observeAsState(initial = "")
     val description: String by viewModel.description
@@ -23,7 +29,7 @@ fun RecipeScreen(navController: NavController, viewModel: RecipeViewModel) {
 
     Scaffold(
         topBar = { TopActionBar(
-            title = "New recipe",
+            title = title,
             showBackButton = true,
             onBackButton = { navController.popBackStack() }
         ) },
@@ -35,8 +41,7 @@ fun RecipeScreen(navController: NavController, viewModel: RecipeViewModel) {
                     name, { viewModel.setName(it) },
                     description, { viewModel.setDescription(it) }
                 ) {
-                    coroutineScope.launch {
-                        viewModel.onSubmit()
+                    if(viewModel.onSubmit()) {
                         navController.popBackStack()
                     }
                 }
@@ -48,7 +53,7 @@ fun RecipeScreen(navController: NavController, viewModel: RecipeViewModel) {
 @Composable
 @Preview(showBackground = true)
 fun RecipeScreenPreview() {
-    RecipeScreen(rememberNavController(), RecipeViewModel())
+    RecipeFormScreen(rememberNavController(), RecipeFormViewModel())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,34 +65,37 @@ fun RecipeForm(
     onChangeDescription: (String) -> Unit,
     onSubmit: () -> Unit
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        contentPadding = PaddingValues(16.dp)
+
     ) {
-        Text(text = "Name")
-        TextField(
-            value = name,
-            onValueChange = { onChangeName(it) },
-            modifier = Modifier.fillMaxWidth()
-        )
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp))
+        item {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = "Name") },
+                value = name,
+                onValueChange = { onChangeName(it) },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+            )
+        }
 
-        Text(text = "Description")
-        TextField(
-            value = description,
-            onValueChange = { onChangeDescription(it) },
-            modifier = Modifier.fillMaxWidth()
-        )
+        item {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Description") },
+                value = description,
+                onValueChange = { onChangeDescription(it) },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+            )
+        }
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp))
-
-        Button(onClick = { onSubmit() }) {
-            Text(text = "Submit")
+        item {
+            Button(onClick = { onSubmit() }) {
+                Text(text = "Submit")
+            }
         }
     }
 }

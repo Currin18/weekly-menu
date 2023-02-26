@@ -1,11 +1,16 @@
 package com.jesusmoreira.weeklymenu.ui.cookbook
 
 import androidx.lifecycle.*
+import com.jesusmoreira.weeklymenu.core.util.PopulateUtil
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetAllRecipesUseCase
+import com.jesusmoreira.weeklymenu.domain.usecase.recipe.InsertRecipeUseCase
 import kotlinx.coroutines.launch
 
-class CookbookViewModel(private val getAllRecipes: GetAllRecipesUseCase?): ViewModel() {
+class CookbookViewModel(
+    private val getAllRecipes: GetAllRecipesUseCase? = null,
+    private val insertRecipe: InsertRecipeUseCase? = null,
+): ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
     fun startLoading() = run { _isLoading.value = true }
@@ -28,6 +33,18 @@ class CookbookViewModel(private val getAllRecipes: GetAllRecipesUseCase?): ViewM
                 _recipes.value = getAll()
 //                stopLoading()
             }
+        }
+    }
+
+    fun populate() {
+        val recipeList = PopulateUtil.populateRecipes()
+        viewModelScope.launch {
+            recipeList.forEach { recipe ->
+                insertRecipe?.let { insert ->
+                    insert(recipe)
+                }
+            }
+            loadRecipes()
         }
     }
 }

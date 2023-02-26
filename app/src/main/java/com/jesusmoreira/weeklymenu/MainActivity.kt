@@ -3,19 +3,19 @@ package com.jesusmoreira.weeklymenu
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.jesusmoreira.weeklymenu.data.local.datasource.RecipesLocalDataSource
 import com.jesusmoreira.weeklymenu.data.local.db.WeeklyMenuDB
 import com.jesusmoreira.weeklymenu.data.repository.RecipeRepository
+import com.jesusmoreira.weeklymenu.domain.usecase.recipe.DeleteRecipeUseCase
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetAllRecipesUseCase
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetRecipeByIdUseCase
 import com.jesusmoreira.weeklymenu.domain.usecase.recipe.InsertRecipeUseCase
 import com.jesusmoreira.weeklymenu.ui.App
 import com.jesusmoreira.weeklymenu.ui.cookbook.CookbookViewModel
 import com.jesusmoreira.weeklymenu.ui.menu.MenuViewModel
-import com.jesusmoreira.weeklymenu.ui.recipe.RecipeViewModel
+import com.jesusmoreira.weeklymenu.ui.recipeform.RecipeFormViewModel
 import com.jesusmoreira.weeklymenu.ui.recipedetail.RecipeDetailViewModel
 import com.jesusmoreira.weeklymenu.ui.theme.WeeklyMenuTheme
 
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var recipeRepository: RecipeRepository
 
     private lateinit var cookbookViewModel: CookbookViewModel
-    private lateinit var recipeViewModel: RecipeViewModel
+    private lateinit var recipeFormViewModel: RecipeFormViewModel
     private lateinit var recipeDetailViewModel: RecipeDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,18 @@ class MainActivity : ComponentActivity() {
         recipeRepository = RecipeRepository(RecipesLocalDataSource(db.recipeDao()))
 
         val menuViewModel = MenuViewModel() // TODO: manage with repository
-        cookbookViewModel = CookbookViewModel(GetAllRecipesUseCase(recipeRepository))
-        recipeViewModel = RecipeViewModel(InsertRecipeUseCase(recipeRepository))
-        recipeDetailViewModel = RecipeDetailViewModel(GetRecipeByIdUseCase(recipeRepository))
+        cookbookViewModel = CookbookViewModel(
+            GetAllRecipesUseCase(recipeRepository),
+            InsertRecipeUseCase(recipeRepository),
+        )
+        recipeFormViewModel = RecipeFormViewModel(
+            GetRecipeByIdUseCase(recipeRepository),
+            InsertRecipeUseCase(recipeRepository)
+        )
+        recipeDetailViewModel = RecipeDetailViewModel(
+            GetRecipeByIdUseCase(recipeRepository),
+            DeleteRecipeUseCase(recipeRepository),
+        )
 
         setContent {
             WeeklyMenuTheme {
@@ -47,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     App(
                         menuViewModel = menuViewModel,
                         cookbookViewModel = cookbookViewModel,
-                        recipeViewModel = recipeViewModel,
+                        recipeFormViewModel = recipeFormViewModel,
                         recipeDetailViewModel = recipeDetailViewModel,
                     )
                 }
