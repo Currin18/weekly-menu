@@ -1,17 +1,28 @@
 package com.jesusmoreira.weeklymenu.ui.recipeform
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.jesusmoreira.weeklymenu.domain.model.Difficulty
+import com.jesusmoreira.weeklymenu.ui.common.DropDown
+import com.jesusmoreira.weeklymenu.ui.common.InputNumber
+import com.jesusmoreira.weeklymenu.ui.common.InputText
 import com.jesusmoreira.weeklymenu.ui.common.TopActionBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +37,10 @@ fun RecipeFormScreen(
         .observeAsState(initial = "")
     val description: String by viewModel.description
         .observeAsState(initial = "")
+    val time: Int by viewModel.time
+        .observeAsState(initial = 0)
+    val difficulty: Difficulty by viewModel.difficulty
+        .observeAsState(initial = Difficulty.EASY)
 
     Scaffold(
         topBar = { TopActionBar(
@@ -39,11 +54,12 @@ fun RecipeFormScreen(
                 .fillMaxSize()) {
                 RecipeForm(
                     name, { viewModel.setName(it) },
-                    description, { viewModel.setDescription(it) }
+                    description, { viewModel.setDescription(it) },
+                    time, { viewModel.setTime(it) },
+                    difficulty, { viewModel.setDifficulty(it) }
                 ) {
-                    if(viewModel.onSubmit()) {
-                        navController.popBackStack()
-                    }
+                    viewModel.onSubmit()
+                    navController.popBackStack()
                 }
             }
         }
@@ -51,20 +67,19 @@ fun RecipeFormScreen(
 }
 
 @Composable
-@Preview(showBackground = true)
-fun RecipeScreenPreview() {
-    RecipeFormScreen(rememberNavController(), RecipeFormViewModel())
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 fun RecipeForm(
-    name: String,
-    onChangeName: (String) -> Unit,
-    description: String,
-    onChangeDescription: (String) -> Unit,
-    onSubmit: () -> Unit
+    name: String = "",
+    onChangeName: (String) -> Unit = {},
+    description: String = "",
+    onChangeDescription: (String) -> Unit = {},
+    time: Int = 0,
+    onChangeTime: (Int) -> Unit = {},
+    difficulty: Difficulty = Difficulty.EASY,
+    onChangeDifficulty: (Difficulty) -> Unit = {},
+    onSubmit: () -> Unit,
 ) {
+    val difficulties = Difficulty.values()
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -73,23 +88,28 @@ fun RecipeForm(
     ) {
 
         item {
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Name") },
-                value = name,
-                onValueChange = { onChangeName(it) },
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
-            )
+            InputText(label = "Name", value = name) { onChangeName(it) }
         }
 
+        item { InputText(label = "Description", value = description) { onChangeDescription(it) } }
+
         item {
-            TextField(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("Description") },
-                value = description,
-                onValueChange = { onChangeDescription(it) },
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
-            )
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                InputNumber(
+                    modifier = Modifier.weight(1f),
+                    label = "Time",
+                    value = time
+                ) { onChangeTime(it) }
+                DropDown(
+                    modifier = Modifier.weight(1f),
+                    label = "Difficult",
+                    value = difficulty.name,
+                    items = difficulties.map { it.name }
+                ) { onChangeDifficulty(difficulties[it]) }
+            }
         }
 
         item {
@@ -98,4 +118,16 @@ fun RecipeForm(
             }
         }
     }
+}
+
+
+/**
+ * Preview
+ */
+
+
+@Composable
+@Preview(showBackground = true)
+fun RecipeScreenPreview() {
+    RecipeFormScreen(rememberNavController(), RecipeFormViewModel())
 }

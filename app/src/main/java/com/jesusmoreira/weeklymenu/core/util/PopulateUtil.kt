@@ -4,7 +4,6 @@ import com.jesusmoreira.weeklymenu.domain.model.Difficulty
 import com.jesusmoreira.weeklymenu.domain.model.Ingredient
 import com.jesusmoreira.weeklymenu.domain.model.Recipe
 import com.jesusmoreira.weeklymenu.domain.model.Service
-import com.jesusmoreira.weeklymenu.domain.model.Unit
 
 object PopulateUtil {
 
@@ -17,8 +16,8 @@ object PopulateUtil {
         services = setOf(Service.LUNCH, Service.DINNER),
         tags = listOf("chicken"),
         ingredients = listOf(
-            Ingredient("packed fresh parsley leaves", 1, Unit.UNITS),
-            Ingredient("tablespoons fresh oregano leaves", 2, Unit.UNITS),
+            Ingredient("packed fresh parsley leaves", "1 unit"),
+            Ingredient("tablespoons fresh oregano leaves", "2 units"),
         ),
         directions = listOf(
             "Preheat the oven to 375 degrees F (190 degrees C). Line a 12x18-inch sheet pan with parchment or aluminum foil; set aside.",

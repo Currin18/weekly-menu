@@ -8,10 +8,7 @@ import androidx.compose.material3.Surface
 import com.jesusmoreira.weeklymenu.data.local.datasource.RecipesLocalDataSource
 import com.jesusmoreira.weeklymenu.data.local.db.WeeklyMenuDB
 import com.jesusmoreira.weeklymenu.data.repository.RecipeRepository
-import com.jesusmoreira.weeklymenu.domain.usecase.recipe.DeleteRecipeUseCase
-import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetAllRecipesUseCase
-import com.jesusmoreira.weeklymenu.domain.usecase.recipe.GetRecipeByIdUseCase
-import com.jesusmoreira.weeklymenu.domain.usecase.recipe.InsertRecipeUseCase
+import com.jesusmoreira.weeklymenu.domain.usecase.recipe.*
 import com.jesusmoreira.weeklymenu.ui.App
 import com.jesusmoreira.weeklymenu.ui.cookbook.CookbookViewModel
 import com.jesusmoreira.weeklymenu.ui.menu.MenuViewModel
@@ -38,16 +35,17 @@ class MainActivity : ComponentActivity() {
 
         val menuViewModel = MenuViewModel() // TODO: manage with repository
         cookbookViewModel = CookbookViewModel(
-            GetAllRecipesUseCase(recipeRepository),
-            InsertRecipeUseCase(recipeRepository),
+            getAllRecipes = GetAllRecipesUseCase(recipeRepository),
+            insertRecipe = InsertRecipeUseCase(recipeRepository),
         )
         recipeFormViewModel = RecipeFormViewModel(
-            GetRecipeByIdUseCase(recipeRepository),
-            InsertRecipeUseCase(recipeRepository)
+            getRecipeById = GetRecipeByIdUseCase(recipeRepository),
+            insertRecipe = InsertRecipeUseCase(recipeRepository),
+            updateRecipe = UpdateRecipeUseCase(recipeRepository),
         )
         recipeDetailViewModel = RecipeDetailViewModel(
-            GetRecipeByIdUseCase(recipeRepository),
-            DeleteRecipeUseCase(recipeRepository),
+            getRecipeById = GetRecipeByIdUseCase(recipeRepository),
+            deleteRecipe = DeleteRecipeUseCase(recipeRepository),
         )
 
         setContent {

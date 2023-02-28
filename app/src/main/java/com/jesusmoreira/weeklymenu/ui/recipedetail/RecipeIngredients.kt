@@ -11,13 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jesusmoreira.weeklymenu.R
 import com.jesusmoreira.weeklymenu.domain.model.Ingredient
-import com.jesusmoreira.weeklymenu.domain.model.Unit
 
 @Composable
 fun RecipeIngredients(ingredients: List<Ingredient> = listOf()) {
@@ -41,36 +38,13 @@ fun RecipeIngredients(ingredients: List<Ingredient> = listOf()) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ingredients.forEach {
-                val plural = "${it.amount}" != "1"
-
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = "${it.name}: ${it.amount} ${unitName(unit = it.unit, plural = plural)}"
+                    text = "${it.name}: ${it.amount}"
                 )
             }
         }
     }
-}
-
-@Composable
-fun unitName(unit: Unit, plural: Boolean = false): String {
-    if (plural) {
-        return when (unit) {
-            Unit.UNITS -> stringResource(id = R.string.unit_unit_plural)
-            Unit.GRAMS -> stringResource(id = R.string.unit_gram_plural)
-            Unit.KILOGRAMS -> stringResource(id = R.string.unit_kilogram_plural)
-            Unit.MILLILITRE -> stringResource(id = R.string.unit_millilitre_plural)
-            Unit.LITRE -> stringResource(id = R.string.unit_litre_plural)
-        }.toLowerCase(Locale.current)
-    }
-
-    return when(unit) {
-        Unit.UNITS -> stringResource(id = R.string.unit_unit)
-        Unit.GRAMS -> stringResource(id = R.string.unit_gram)
-        Unit.KILOGRAMS -> stringResource(id = R.string.unit_kilogram)
-        Unit.MILLILITRE -> stringResource(id = R.string.unit_millilitre)
-        Unit.LITRE -> stringResource(id = R.string.unit_litre)
-    }.toLowerCase(Locale.current)
 }
 
 /**
@@ -81,7 +55,7 @@ fun unitName(unit: Unit, plural: Boolean = false): String {
 @Preview
 fun RecipeIngredientsPreview() {
     RecipeIngredients(listOf(
-        Ingredient("Potato", 1, Unit.UNITS),
-        Ingredient("Sugar", 5.5f, Unit.GRAMS),
+        Ingredient("Potato", "1"),
+        Ingredient("Sugar", "5.5"),
     ))
 }
