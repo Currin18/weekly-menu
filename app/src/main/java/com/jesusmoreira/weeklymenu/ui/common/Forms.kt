@@ -1,101 +1,130 @@
 package com.jesusmoreira.weeklymenu.ui.common
 
+import android.util.Log
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.*
+import kotlin.math.roundToInt
 
+data class Position(var from: Float = -1f, var to: Float = -1f)
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun InputText(
-    modifier: Modifier = Modifier,
-    label: String = "",
-    value: String = "",
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
-    onValueChange: (String) -> Unit = {}
-) {
-    TextField(
-        modifier = modifier.fillMaxWidth(),
-        label = { Text(text = label) },
-        value = value,
-        onValueChange = onValueChange,
-        keyboardOptions = KeyboardOptions(capitalization = capitalization)
-    )
-}
+fun DraggableList() {
+    val items = remember { mutableStateOf(List(5) { "Item $it" }) }
+    val state = rememberReorderableLazyListState(onMove = { from, to ->
+        items.value = items.value.toMutableList().apply {
+            add(to.index, removeAt(from.index))
+        }
+    })
+    val position = remember{ mutableStateOf(Position()) }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InputNumber(
-    modifier: Modifier = Modifier,
-    label: String = "",
-    value: Int = 0,
-    onValueChange: (Int) -> Unit = {}
-) {
-    TextField(
-        modifier = modifier.fillMaxWidth(),
-        label = { Text(text = label) },
-        value = "$value",
-        onValueChange = { onValueChange(it.toInt()) },
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.None,
-            keyboardType = KeyboardType.Number,
-        )
-    )
-}
+    LaunchedEffect(position) {
+        Log.d("DRAGGABLE_LIST", "from: ${position.value.from}, to: ${position.value.to}")
+    }
 
-@Composable
-fun DropDown(
-    modifier: Modifier = Modifier,
-    label: String = "Label",
-    value: String = "",
-    items: List<String> = listOf(),
-    onSelectedOption: (Int) -> Unit = {},
-) {
-    var expanded by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    Box(modifier = modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = { expanded = true })
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items.value.forEach { item ->
+//            var offsetY by remember { mutableStateOf(0f) }
+            val offsetY  =  remember { Animatable(0f) }
+
             Text(
-                text = label,
-                modifier = Modifier.fillMaxWidth(),
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = value,
-                modifier = Modifier.fillMaxWidth()
+                text = item,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset { IntOffset(0, offsetY.value.roundToInt()) }
+                    .draggable(
+                        state = rememberDraggableState { delta ->
+                            coroutineScope.launch {
+                                offsetY.snapTo(offsetY.value + delta)
+                                position.value.from = offsetY.value + delta
+                            }
+                        },
+                        orientation = Orientation.Vertical,
+                        onDragStarted = {
+                            position.value.from = it.y
+                            Log.d("DRAGGABLE_LIST", "onDragStarted ${it.y}")
+                        },
+                        onDragStopped = {
+                            coroutineScope.launch {
+                                offsetY.animateTo(
+                                    targetValue = 0f,
+                                    animationSpec = tween(
+                                        durationMillis = 3000,
+                                        delayMillis = 0
+                                    )
+                                )
+                            }
+                        }
+                    )
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(8.dp)
             )
         }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            items.forEachIndexed { index, item ->
-                DropdownMenuItem(
-                    text = { Text(text = item.capitalize(Locale.current)) },
-                    onClick = {
-                        onSelectedOption(index)
-                        expanded = false
-                    }
-                )
+    }
+}
+
+// @Composable
+inline fun <T> LazyListScope.reorderableItems(
+    items: List<T>,
+    state: ReorderableState<*>,
+    noinline key: ((item: T) -> Any)? = null,
+    crossinline itemContent: @Composable ColumnScope.(item: T) -> Unit
+) {
+    items(items) {
+        ReorderableItem(reorderableState = state, key = key) { isDragging ->
+            val elevation = animateDpAsState(targetValue = if (isDragging) 16.dp else 0.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = elevation.value)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                itemContent(it)
             }
         }
     }
+}
+
+/**
+ * Previews
+ */
+
+@Composable
+@Preview(group = "DraggableList", name = "Default", showBackground = true)
+fun DraggableListDefault() {
+    /*val items = remember { mutableStateOf(List(5) { "Item $it" }) }
+    val state = rememberReorderableLazyListState(onMove = { from, to ->
+        items.value = items.value.toMutableList().apply {
+            add(to.index, removeAt(from.index))
+        }
+    })
+
+    LazyColumn {
+        reorderableItems(items.value, state) {
+            Text(it, modifier = Modifier.padding(8.dp))
+        }
+    }*/
+
+    DraggableList()
 }

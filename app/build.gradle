@@ -67,6 +67,9 @@ dependencies {
     // GSON
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    implementation 'org.burnoutcrew.composereorderable:reorderable:0.9.6'
+    implementation "com.google.accompanist:accompanist-flowlayout:0.28.0"
+
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

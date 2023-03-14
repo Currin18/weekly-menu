@@ -41,9 +41,9 @@ class RecipeFormViewModel(
     val services: LiveData<Set<Service>> = _services
     fun setServices(services: Set<Service>) { _services.value = services }
 
-    private val _tags = MutableLiveData<List<String>>(listOf())
-    val tags: LiveData<List<String>> = _tags
-    fun setTags(tags: List<String>) { _tags.value = tags }
+    private val _tags = MutableLiveData<Set<String>>(setOf())
+    val tags: LiveData<Set<String>> = _tags
+    fun setTags(tags: Set<String>) { _tags.value = tags }
 
     private val _ingredients = MutableLiveData<List<Ingredient>>(listOf())
     val ingredients: LiveData<List<Ingredient>> = _ingredients

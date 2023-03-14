@@ -29,7 +29,7 @@ fun RecipeOverview(
     time: Int,
     difficulty: Difficulty,
     services: Set<Service>,
-    tags: List<String>,
+    tags: Set<String>,
 ) {
     val horizontalPadding = 16.dp
     val verticalPadding = 8.dp
@@ -109,7 +109,7 @@ fun RecipeOverviewExtra(modifier: Modifier = Modifier, time: Int, difficulty: Di
 @Composable
 fun TagList(
     modifier: Modifier = Modifier,
-    tags: List<String> = listOf(),
+    tags: Set<String> = setOf(),
 ) {
     Row(
         modifier = modifier,
@@ -144,6 +144,6 @@ fun RecipeOverviewPreview() {
         time = 35,
         difficulty = Difficulty.MEDIUM,
         services = setOf(Service.LUNCH, Service.DINNER),
-        tags = listOf("Asian", "Pork", "Rice", "Spicy")
+        tags = setOf("Asian", "Pork", "Rice", "Spicy")
     )
 }

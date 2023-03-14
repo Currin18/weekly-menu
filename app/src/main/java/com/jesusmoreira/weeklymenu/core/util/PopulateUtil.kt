@@ -14,7 +14,7 @@ object PopulateUtil {
         time = 40,
         difficulty = Difficulty.EASY,
         services = setOf(Service.LUNCH, Service.DINNER),
-        tags = listOf("chicken"),
+        tags = setOf("chicken"),
         ingredients = listOf(
             Ingredient("packed fresh parsley leaves", "1 unit"),
             Ingredient("tablespoons fresh oregano leaves", "2 units"),

@@ -10,7 +10,7 @@ data class Recipe(
     var time: Int = 0,
     var difficulty: Difficulty = Difficulty.EASY,
     var services: Set<Service> = setOf(Service.LUNCH, Service.DINNER),
-    var tags: List<String> = listOf("tag1", "tag2"),
+    var tags: Set<String> = setOf("tag1", "tag2"),
     var ingredients: List<Ingredient> = listOf(
         Ingredient("Potato", "1 unit"),
         Ingredient("Sugar", "5.5 grams"),
